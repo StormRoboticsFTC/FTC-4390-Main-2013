@@ -8,6 +8,6 @@ typedef struct DriveSys {
 		   frontRight,
 		   backLeft,
 		   backRight;
-};
+}
 
 #endif
