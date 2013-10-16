@@ -1,11 +1,10 @@
-#ifndef DRIVESYS_H
-#define DRIVESYS_H
+#ifndef LADDERSYS_C
+#define LADDERSYS_C
 
-typedef struct  {
+typedef struct {
 	//pointers to motors in the array motor[]
 	//frontLeft and frontRight should have motorEncoders mounted
-	tMotor	backLeft,
-		backRight;
-}DriveSys;
+	tMotor bottom;
+}LadderSys;
 
 #endif
