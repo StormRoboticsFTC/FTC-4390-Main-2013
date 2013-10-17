@@ -2,9 +2,9 @@
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Motor,  mtr_S1_C2_1,     backLeft,      tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C2_2,     backRight,     tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C3_1,     motorF,        tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C3_2,     motorG,        tmotorTetrix, openLoop)
-#pragma config(Servo,  srvo_S1_C1_1,    servo1,               tServoNone)
+#pragma config(Motor,  mtr_S1_C3_1,     ladderMotor,   tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
+#pragma config(Servo,  srvo_S1_C1_1,    rakeServo,            tServoStandard)
 #pragma config(Servo,  srvo_S1_C1_2,    servo2,               tServoNone)
 #pragma config(Servo,  srvo_S1_C1_3,    servo3,               tServoNone)
 #pragma config(Servo,  srvo_S1_C1_4,    servo4,               tServoNone)
@@ -20,15 +20,23 @@
 #include "drive.c"
 #include "ladder.h"
 #include "ladder.c"
+#include "flag.h"
+#include "flag.c"
+#include "rake.h"
+#include "rake.c"
 
 DriveSys drive;
 LadderSys ladder;
+FlagSys flag;
+RakeSys rake;
 
 void initializeRobot()
 {
 	drive.backLeft = backLeft;
 	drive.backRight = backRight;
-	//DriveSysladder.bottom = bottom;
+	ladder.ladderMotor = ladderMotor;
+	flag.flagMotor = flagMotor;
+	rake.rakeServo = rakeServo;
 
 	return;
 }
@@ -43,10 +51,9 @@ task main(){
 
 	while (true){
 		getJoystickSettings(joystick);
-		//motor[backLeft] = 100;
-		//motor[backRight] = 50;
-		motor[motorF] = 100;
 		updateDriveSys(drive, joystick.joy1_y1 * (100.0/128.0), joystick.joy1_y2 * (100.0/128.0));
-		//updateLadderSys(ladder, joystick.joy2_y1 * (100.0/128.0));
+		updateLadderSys(ladder, joystick.joy2_y1 * (100.0/128.0));
+		updateFlagSys(flag, joystick.joy2_y2 * (100.0/128.0));
+		updateRakeSys(rake, joy2Btn(1), joy2Btn(3));
 	}
 }
