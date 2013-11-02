@@ -1,6 +1,5 @@
 #pragma config(Hubs,  S1, HTServo,  HTMotor,  HTMotor,  HTMotor)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Sensor, S2,     touchSensor,    sensorTouch)
+#pragma config(Sensor, S2,     IRSensor,       sensorHiTechnicIRSeeker1200)
 #pragma config(Motor,  mtr_S1_C2_1,     backLeft,      tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_2,     backRight,     tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C3_1,     ladderMotor,   tmotorTetrix, openLoop)
@@ -63,10 +62,12 @@ task main(){
 	#endif
 
 	//while the touch sensor is not pressed
+	/*
 	while(SensorValue(touchSensor) == 0){
-		updateDriveSys(drive, 100, 100);
+		updateDriveSys(drive, 100, 100, 100, 100);
 		//wait1Msec(3000);
 		//updateDriveSys(drive, 0, 0);
 	}
+	*/
 
 }
