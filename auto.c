@@ -27,6 +27,7 @@
 #include "flag.c"
 #include "rake.h"
 #include "rake.c"
+#include "drivers/hitechnic-irseeker-v2.h"
 
 DriveSys drive;
 LadderSys ladder;
@@ -61,13 +62,66 @@ task main(){
 	waitForStart();   // wait for start of tele-op phase
 	#endif
 
-	//while the touch sensor is not pressed
-	/*
-	while(SensorValue(touchSensor) == 0){
-		updateDriveSys(drive, 100, 100, 100, 100);
-		//wait1Msec(3000);
-		//updateDriveSys(drive, 0, 0);
-	}
-	*/
+    bool blockFound;
 
+    while(true){
+        if(!blockFound) driveForward();
+
+        int irs[5], maxSig; //infra-red sensor strengths, maximmum signal
+        HTIRS2readAllACStrength(IRSensor, irs[0], irs[1], irs[2], irs[3], irs[4]);
+        if(maxSig(irs[0], irs[1], irs[2], irs[3], irs[4])==irs[0]){
+            blockFound=true;
+
+            //Turn and place block in basket
+            turnLeft();
+            driveForward();
+            driveBackward();
+            turnRight();
+
+            driveToRamp();
+        }
+    }
+}
+
+int maxSig(int num0, num1, num2, num3, num4){
+    if(num0>num1 && num0>num2 && num0>num3 && num0>num4) return num0;
+    if(num1>num2 && num1>num3 && num1>num4) return num1;
+    if(num2>num3 && num2>num4) return num2;
+    if(num3>num4) return num3;
+    return num4;
+}
+
+void driveForward(){
+    updateDriveSys(drive, 100, 100, 100, 100);
+    wait1Msec(1000);
+}
+
+void driveBackward(){
+    updateDriveSys(drive, -100, -100, -100, -100);
+    wait1Msec(1000);
+}
+
+void turnLeft(){
+    updateDriveSys(drive, -100, 100, -100, 100);
+    wait1Msec(2000);
+}
+
+void placeBlock(){
+    //use rake?
+}
+
+void turnRight(){
+    updateDriveSys(drive, 100, -100, 100, -100);
+    wait1Msec(2000);
+}
+
+void drivetoRamp(){
+    updateDriveSys(drive, 100, 100, 100, 100);
+    wait1Msec(3000);
+
+    turnLeft();
+    turnLeft();
+
+    updateDriveSys(drive, 100, 100, 100, 100);
+    wait1Msec(3000);
 }
