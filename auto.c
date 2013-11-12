@@ -36,31 +36,31 @@ RakeSys rake;
 
 void initializeRobot()
 {
-	drive.backLeft = backLeft;
-	drive.backRight = backRight;
-	drive.frontLeft = frontLeft;
-	drive.frontRight = frontRight;
+        drive.backLeft = backLeft;
+        drive.backRight = backRight;
+        drive.frontLeft = frontLeft;
+        drive.frontRight = frontRight;
 
-	ladder.ladderMotor = ladderMotor;
+        ladder.ladderMotor = ladderMotor;
 
-	flag.flagMotor = flagMotor;
+        flag.flagMotor = flagMotor;
 
-	rake.rakeServo = rakeServo;
-	rake.maxValue = 200;
-	rake.minValue = 120;
+        rake.rakeServo = rakeServo;
+        rake.maxValue = 200;
+        rake.minValue = 120;
 
-	servo[rake.rakeServo] = 135;
+        servo[rake.rakeServo] = 135;
 
-	return;
+        return;
 }
 
 task main(){
 
-	initializeRobot();
+        initializeRobot();
 
-	#ifdef COMPETITION
-	waitForStart();   // wait for start of tele-op phase
-	#endif
+        #ifdef COMPETITION
+        waitForStart();   // wait for start of tele-op phase
+        #endif
 
     bool blockFound;
 

@@ -67,12 +67,5 @@ task main(){
 		updateLadderSys(ladder, joystick.joy2_y1 * (100.0/128.0));
 		updateFlagSys(flag, joystick.joy2_y2 * (100.0/128.0));
 		updateRakeSys(rake, joy2Btn(1), joy2Btn(3));
-		//writeDebugStreamLine("%d", ServoValue[rakeServo]);
-		/*
-		writeDebugStreamLine("joy2Btn(0): %d", joy2Btn(0));
-		writeDebugStreamLine("joy2Btn(1): %d", joy2Btn(1));
-		writeDebugStreamLine("joy2Btn(2): %d", joy2Btn(2));
-		writeDebugStreamLine("joy2Btn(3): %d", joy2Btn(3));
-		*/
 	}
 }

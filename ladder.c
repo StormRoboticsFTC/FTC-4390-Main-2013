@@ -2,8 +2,8 @@
 #define LADDERSYS_C
 
 //update ladder lift
-void updateLadderSys (LadderSys t, int motorPower){
-	motor[t.ladderMotor] = motorPower;
+void updateLadderSys (LadderSys t, int ladderMotorPower){
+	motor[t.ladderMotor] = ladderMotorPower;
 	return;
 };
 
