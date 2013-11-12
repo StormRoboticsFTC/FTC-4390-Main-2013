@@ -54,36 +54,7 @@ void initializeRobot()
         return;
 }
 
-task main(){
-
-        initializeRobot();
-
-        #ifdef COMPETITION
-        waitForStart();   // wait for start of tele-op phase
-        #endif
-
-    bool blockFound;
-
-    while(true){
-        if(!blockFound) driveForward();
-
-        int irs[5], maxSig; //infra-red sensor strengths, maximmum signal
-        HTIRS2readAllACStrength(IRSensor, irs[0], irs[1], irs[2], irs[3], irs[4]);
-        if(maxSig(irs[0], irs[1], irs[2], irs[3], irs[4])==irs[0]){
-            blockFound=true;
-
-            //Turn and place block in basket
-            turnLeft();
-            driveForward();
-            driveBackward();
-            turnRight();
-
-            driveToRamp();
-        }
-    }
-}
-
-int maxSig(int num0, num1, num2, num3, num4){
+int maxSig(int num0, int num1, int num2, int num3, int num4){
     if(num0>num1 && num0>num2 && num0>num3 && num0>num4) return num0;
     if(num1>num2 && num1>num3 && num1>num4) return num1;
     if(num2>num3 && num2>num4) return num2;
@@ -115,7 +86,7 @@ void turnRight(){
     wait1Msec(2000);
 }
 
-void drivetoRamp(){
+void driveToRamp(){
     updateDriveSys(drive, 100, 100, 100, 100);
     wait1Msec(3000);
 
@@ -124,4 +95,34 @@ void drivetoRamp(){
 
     updateDriveSys(drive, 100, 100, 100, 100);
     wait1Msec(3000);
+}
+
+task main(){
+
+	initializeRobot();
+
+	#ifdef COMPETITION
+	waitForStart();   // wait for start of tele-op phase
+	#endif
+
+    bool beaconFound;
+
+    while(true){
+        if(!beaconFound) driveForward();
+
+        int irs[5]; //infra-red sensor strengths, maximmum signal
+        HTIRS2readAllACStrength(IRSensor, irs[0], irs[1], irs[2], irs[3], irs[4]);
+
+        if(maxSig(irs[0], irs[1], irs[2], irs[3], irs[4])==irs[0]){
+            beaconFound=true;
+
+            //Turn and place block in basket
+            turnLeft();
+            driveForward();
+            driveBackward();
+            turnRight();
+
+            driveToRamp();
+        }
+    }
 }
