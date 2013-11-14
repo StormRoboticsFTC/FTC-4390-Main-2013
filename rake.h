@@ -3,7 +3,8 @@
 
 typedef struct {
 	TServoIndex rakeServo;
-	int maxValue, minValue;
+	TServoIndex pendulumMoverServo;
+	int maxValue, minValue, maxValue2, minValue2;
 }RakeSys;
 
 #endif

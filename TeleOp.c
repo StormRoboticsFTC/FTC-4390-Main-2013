@@ -7,7 +7,7 @@
 #pragma config(Motor,  mtr_S1_C4_1,     frontLeft,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C4_2,     frontRight,    tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C1_1,    rakeServo,            tServoStandard)
-#pragma config(Servo,  srvo_S1_C1_2,    servo2,               tServoNone)
+#pragma config(Servo,  srvo_S1_C1_2,    pendulumMoverServo,   tServoStandard)
 #pragma config(Servo,  srvo_S1_C1_3,    servo3,               tServoNone)
 #pragma config(Servo,  srvo_S1_C1_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S1_C1_5,    servo5,               tServoNone)
@@ -48,7 +48,12 @@ void initializeRobot()
 	rake.maxValue = 200;
 	rake.minValue = 120;
 
+	rake.pendulumMoverServo = pendulumMoverServo;
+	rake.maxValue2 = 0;
+	rake.minValue2 = 0;
+
 	servo[rake.rakeServo] = 135;
+	servo[rake.pendulumMoverServo] = 0;
 
 	return;
 }
@@ -66,6 +71,6 @@ task main(){
 		updateDriveSys(drive, joystick.joy1_y1 * (100.0/128.0), joystick.joy1_y2 * (100.0/128.0), joystick.joy1_y1 * (100.0/128.0), joystick.joy1_y2 * (100.0/128.0));
 		updateLadderSys(ladder, joystick.joy2_y1 * (100.0/128.0));
 		updateFlagSys(flag, joystick.joy2_y2 * (100.0/128.0));
-		updateRakeSys(rake, joy2Btn(1), joy2Btn(3));
+		updateRakeSys(rake, joy2Btn(1), joy2Btn(3), joy2Btn(2), joy2Btn(4));
 	}
 }

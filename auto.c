@@ -1,4 +1,5 @@
 #pragma config(Hubs,  S1, HTServo,  HTMotor,  HTMotor,  HTMotor)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     IRSensor,       sensorHiTechnicIRSeeker1200)
 #pragma config(Motor,  mtr_S1_C2_1,     backLeft,      tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_2,     backRight,     tmotorTetrix, openLoop, reversed)
@@ -7,7 +8,7 @@
 #pragma config(Motor,  mtr_S1_C4_1,     frontLeft,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C4_2,     frontRight,    tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C1_1,    rakeServo,            tServoStandard)
-#pragma config(Servo,  srvo_S1_C1_2,    servo2,               tServoNone)
+#pragma config(Servo,  srvo_S1_C1_2,    pendulumMoverServo,   tServoStandard)
 #pragma config(Servo,  srvo_S1_C1_3,    servo3,               tServoNone)
 #pragma config(Servo,  srvo_S1_C1_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S1_C1_5,    servo5,               tServoNone)
@@ -49,7 +50,12 @@ void initializeRobot()
         rake.maxValue = 200;
         rake.minValue = 120;
 
-        servo[rake.rakeServo] = 135;
+        rake.pendulumMoverServo = pendulumMoverServo;
+		rake.maxValue2 = 0;
+		rake.minValue2 = 0;
+
+		servo[rake.rakeServo] = 135;
+		servo[rake.pendulumMoverServo] = 0;
 
         return;
 }
