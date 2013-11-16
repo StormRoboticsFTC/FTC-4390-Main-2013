@@ -103,6 +103,26 @@ void driveToRamp(){
     wait1Msec(3000);
 }
 
+void driveToRamp2(){
+	updateDriveSys(drive, -100, -100, -100, -100);
+    wait1Msec(1000);
+
+	turnRight();
+
+    updateDriveSys(drive, 100, 100, 100, 100);
+    wait1Msec(3000);
+
+    turnLeft();
+
+    updateDriveSys(drive, 100, 100, 100, 100);
+    wait1Msec(1000);
+
+    turnLeft();
+
+    updateDriveSys(drive, 100, 100, 100, 100);
+    wait1Msec(3000);
+}
+
 task main(){
 
 	initializeRobot();
@@ -111,9 +131,11 @@ task main(){
 	waitForStart();   // wait for start of tele-op phase
 	#endif
 
-    bool beaconFound;
+    //bool beaconFound=false;
 
     while(true){
+    	//Detect IR Beacon method
+    	/*
         if(!beaconFound) driveForward();
 
         int irs[5]; //infra-red sensor strengths, maximmum signal
@@ -130,5 +152,13 @@ task main(){
 
             driveToRamp();
         }
+        */
+
+        //Drive forward method
+        updateDriveSys(drive, 100, 100, 100, 100);
+        wait1Msec(3000);
+
+        //Drive to ramp
+        driveToRamp2();
     }
 }

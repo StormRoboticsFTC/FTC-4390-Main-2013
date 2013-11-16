@@ -49,11 +49,9 @@ void initializeRobot()
 	rake.minValue = 120;
 
 	rake.pendulumMoverServo = pendulumMoverServo;
-	rake.maxValue2 = 200;
-	rake.minValue2 = 120;
 
 	servo[rake.rakeServo] = 135;
-	servo[rake.pendulumMoverServo] = 135;
+	//servo[rake.pendulumMoverServo] = 0;
 
 	return;
 }
