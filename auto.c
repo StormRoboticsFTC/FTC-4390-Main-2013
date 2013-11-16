@@ -51,11 +51,9 @@ void initializeRobot()
         rake.minValue = 120;
 
         rake.pendulumMoverServo = pendulumMoverServo;
-		rake.maxValue2 = 200;
-		rake.minValue2 = 120;
 
 		servo[rake.rakeServo] = 135;
-		servo[rake.pendulumMoverServo] = 135;
+		servo[rake.pendulumMoverServo] = 0;
 
         return;
 }
@@ -131,14 +129,12 @@ task main(){
 	waitForStart();   // wait for start of tele-op phase
 	#endif
 
-    //bool beaconFound=false;
+    //Detect IR Beacon method
+    /*
+    bool beaconFound=false;
 
-    while(true){
-    	//Detect IR Beacon method
-    	/*
-        if(!beaconFound) driveForward();
-
-        int irs[5]; //infra-red sensor strengths, maximmum signal
+    if(!beaconFound) driveForward();
+    	int irs[5]; //infra-red sensor strengths, maximmum signal
         HTIRS2readAllACStrength(IRSensor, irs[0], irs[1], irs[2], irs[3], irs[4]);
 
         if(maxSig(irs[0], irs[1], irs[2], irs[3], irs[4])==irs[0]){
@@ -151,14 +147,13 @@ task main(){
             turnRight();
 
             driveToRamp();
-        }
-        */
+	}
+    */
 
-        //Drive forward method
-        updateDriveSys(drive, 100, 100, 100, 100);
-        wait1Msec(3000);
+    //Drive forward method
+    updateDriveSys(drive, 100, 100, 100, 100);
+    wait1Msec(1000);
 
-        //Drive to ramp
-        driveToRamp2();
-    }
+    //Drive to ramp
+    driveToRamp2();
 }
