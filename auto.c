@@ -2,11 +2,11 @@
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     IRSensor,       sensorHiTechnicIRSeeker1200)
 #pragma config(Motor,  mtr_S1_C2_1,     backLeft,      tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C2_2,     backRight,     tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C2_2,     frontRight,    tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C3_1,     ladderMotor,   tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C4_1,     frontLeft,     tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_2,     frontRight,    tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C4_2,     backRight,     tmotorTetrix, openLoop, reversed)
 #pragma config(Servo,  srvo_S1_C1_1,    rakeServo,            tServoStandard)
 #pragma config(Servo,  srvo_S1_C1_2,    pendulumMoverServo,   tServoStandard)
 #pragma config(Servo,  srvo_S1_C1_3,    servo3,               tServoNone)
@@ -47,7 +47,7 @@ void initializeRobot()
         flag.flagMotor = flagMotor;
 
         rake.rakeServo = rakeServo;
-        rake.maxValue = 200;
+        rake.maxValue = 210;
         rake.minValue = 120;
 
         rake.pendulumMoverServo = pendulumMoverServo;
@@ -113,7 +113,7 @@ void driveToRamp2(){
     turnLeft();
 
     updateDriveSys(drive, 100, 100, 100, 100);
-    wait1Msec(1000);
+    wait1Msec(2000);
 
     turnLeft();
 
@@ -150,10 +150,10 @@ task main(){
 	}
     */
 
-    //Drive forward method
-    updateDriveSys(drive, 100, 100, 100, 100);
-    wait1Msec(1000);
+    //Drive backwards onto ramp method
+    updateDriveSys(drive, -100, -100, -100, -100);
+    wait1Msec(3000);
 
     //Drive to ramp
-    driveToRamp2();
+    //driveToRamp2();
 }

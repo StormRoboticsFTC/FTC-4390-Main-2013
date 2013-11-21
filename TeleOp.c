@@ -1,11 +1,11 @@
 #pragma config(Hubs,  S1, HTServo,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Motor,  mtr_S1_C2_1,     backLeft,      tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C2_2,     backRight,     tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C2_1,     backLeft,      tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C2_2,     frontRight,    tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C3_1,     ladderMotor,   tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_1,     frontLeft,     tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_2,     frontRight,    tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C4_1,     frontLeft,     tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C4_2,     backRight,     tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Servo,  srvo_S1_C1_1,    rakeServo,            tServoStandard)
 #pragma config(Servo,  srvo_S1_C1_2,    pendulumMoverServo,   tServoStandard)
 #pragma config(Servo,  srvo_S1_C1_3,    servo3,               tServoNone)
@@ -45,7 +45,7 @@ void initializeRobot()
 	flag.flagMotor = flagMotor;
 
 	rake.rakeServo = rakeServo;
-	rake.maxValue = 200;
+	rake.maxValue = 210;
 	rake.minValue = 120;
 
 	rake.pendulumMoverServo = pendulumMoverServo;
@@ -56,7 +56,26 @@ void initializeRobot()
 	return;
 }
 
+void debugEncoders(){
+	int temp = nMotorEncoder[frontRight];
+	if(temp>0){
+		while(nMotorEncoder[frontRight]>0){
+			motor[frontRight]=100;
+			//nMotorEncoder[frontRight]-=1;
+		}
+	} else if(temp<0){
+		while(nMotorEncoder[frontRight]<0){
+			motor[frontRight]=100;
+			//nMotorEncoder[frontRight]+=1;
+		}
+	}
+}
+
 task main(){
+	//Debug code
+	nMotorEncoder[frontRight]=0;
+	int c=0;
+	clearDebugStream();
 
 	initializeRobot();
 
@@ -69,6 +88,11 @@ task main(){
 		updateDriveSys(drive, joystick.joy1_y1 * (100.0/128.0), joystick.joy1_y2 * (100.0/128.0), joystick.joy1_y1 * (100.0/128.0), joystick.joy1_y2 * (100.0/128.0));
 		updateLadderSys(ladder, joystick.joy2_y1 * (100.0/128.0));
 		updateFlagSys(flag, joystick.joy2_y2 * (100.0/128.0));
-		updateRakeSys(rake, joy2Btn(1), joy2Btn(3), joy2Btn(2), joy2Btn(4));
+		updateRakeSys(rake, joy2Btn(1), joy2Btn(3), joy1Btn(5), joy1Btn(6));
+
+		//Debug code
+		c++;
+		if(c%40==0) writeDebugStreamLine("The encoder value is: %d", nMotorEncoder[frontRight]);
+		if(joy1Btn(1)==1) debugEncoders();
 	}
 }
