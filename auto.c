@@ -37,7 +37,7 @@ RakeSys rake;
 
 void initializeRobot()
 {
-        drive.backLeft = backLeft;
+	        drive.backLeft = backLeft;
         drive.backRight = backRight;
         drive.frontLeft = frontLeft;
         drive.frontRight = frontRight;
@@ -55,7 +55,7 @@ void initializeRobot()
 		servo[rake.rakeServo] = 135;
 		servo[rake.pendulumMoverServo] = 0;
 
-        return;
+		return;
 }
 
 int maxSig(int num0, int num1, int num2, int num3, int num4){
@@ -66,59 +66,23 @@ int maxSig(int num0, int num1, int num2, int num3, int num4){
     return num4;
 }
 
-void driveForward(){
-    updateDriveSys(drive, 100, 100, 100, 100);
-    wait1Msec(1000);
-}
-
-void driveBackward(){
-    updateDriveSys(drive, -100, -100, -100, -100);
-    wait1Msec(1000);
-}
-
-void turnLeft(){
-    updateDriveSys(drive, -100, 100, -100, 100);
-    wait1Msec(2000);
-}
-
-void placeBlock(){
-    //use rake?
-}
-
-void turnRight(){
-    updateDriveSys(drive, 100, -100, 100, -100);
-    wait1Msec(2000);
-}
-
-void driveToRamp(){
-    updateDriveSys(drive, 100, 100, 100, 100);
-    wait1Msec(3000);
-
-    turnLeft();
-    turnLeft();
-
-    updateDriveSys(drive, 100, 100, 100, 100);
-    wait1Msec(3000);
-}
-
-void driveToRamp2(){
-	updateDriveSys(drive, -100, -100, -100, -100);
-    wait1Msec(1000);
-
-	turnRight();
-
-    updateDriveSys(drive, 100, 100, 100, 100);
-    wait1Msec(3000);
-
-    turnLeft();
-
-    updateDriveSys(drive, 100, 100, 100, 100);
-    wait1Msec(2000);
-
-    turnLeft();
-
-    updateDriveSys(drive, 100, 100, 100, 100);
-    wait1Msec(3000);
+void resetDriveEncoders(int encoderValue){
+	int temp = encoderValue;
+	if(temp>0){
+		while(nMotorEncoder[frontRight]>=0){
+			motor[frontRight]=-25;
+			motor[frontLeft]=-25;
+			motor[backRight]=-25;
+			motor[backLeft]=-25;
+		}
+	} else if(temp<0){
+		while(nMotorEncoder[frontRight]<=0){
+			motor[frontRight]=-25;
+			motor[frontLeft]=-25;
+			motor[backRight]=-25;
+			motor[backLeft]=-25;
+		}
+	}
 }
 
 task main(){
@@ -130,30 +94,27 @@ task main(){
 	#endif
 
     //Detect IR Beacon method
-    /*
+
+	/*
     bool beaconFound=false;
 
     if(!beaconFound) driveForward();
-    	int irs[5]; //infra-red sensor strengths, maximmum signal
-        HTIRS2readAllACStrength(IRSensor, irs[0], irs[1], irs[2], irs[3], irs[4]);
+    int irs[5]; //infra-red sensor strengths, maximmum signal
+    HTIRS2readAllACStrength(IRSensor, irs[0], irs[1], irs[2], irs[3], irs[4]);
 
-        if(maxSig(irs[0], irs[1], irs[2], irs[3], irs[4])==irs[0]){
-            beaconFound=true;
+    if(maxSig(irs[0], irs[1], irs[2], irs[3], irs[4])==irs[0]){
+    	beaconFound=true;
 
-            //Turn and place block in basket
-            turnLeft();
-            driveForward();
-            driveBackward();
-            turnRight();
-
-            driveToRamp();
-	}
+        //Turn and place block in basket
+    }
     */
 
+    //Place block in basket and drive to ramp
+
+
     //Drive backwards onto ramp method
+    /*
     updateDriveSys(drive, -100, -100, -100, -100);
     wait1Msec(3000);
-
-    //Drive to ramp
-    //driveToRamp2();
+    */
 }

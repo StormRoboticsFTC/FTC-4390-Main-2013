@@ -9,14 +9,14 @@ void updateRakeSys (RakeSys t, short button1, short button2, short button3, shor
 		servo[t.rakeServo] = t.minValue;
 	}
 	if(button3==1 && t.buttonPressed!=true){
-		servo[t.pendulumMoverServo] += 1;
+ 		servo[t.pendulumMoverServo] += 1;
 		t.buttonPressed=true;
 	} else if(button4==1 && t.buttonPressed!=true){
-		servo[t.pendulumMoverServo] -= 1;
+ 		servo[t.pendulumMoverServo] -= 1;
 		t.buttonPressed=true;
 	} else {
 		t.buttonPressed=false;
-	}
+ 	}
 
 	return;
 };

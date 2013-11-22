@@ -59,23 +59,28 @@ void initializeRobot()
 void debugEncoders(){
 	int temp = nMotorEncoder[frontRight];
 	if(temp>0){
-		while(nMotorEncoder[frontRight]>0){
-			motor[frontRight]=100;
-			//nMotorEncoder[frontRight]-=1;
+		while(nMotorEncoder[frontRight]>=0){
+			motor[frontRight]=-25;
+			motor[frontLeft]=-25;
+			motor[backRight]=-25;
+			motor[backLeft]=-25;
 		}
 	} else if(temp<0){
-		while(nMotorEncoder[frontRight]<0){
-			motor[frontRight]=100;
-			//nMotorEncoder[frontRight]+=1;
+		while(nMotorEncoder[frontRight]<=0){
+			motor[frontRight]=25;
+			motor[frontLeft]=25;
+			motor[backRight]=25;
+			motor[backLeft]=25;
 		}
 	}
 }
 
 task main(){
 	//Debug code
+	/*
 	nMotorEncoder[frontRight]=0;
-	int c=0;
 	clearDebugStream();
+	*/
 
 	initializeRobot();
 
@@ -91,8 +96,9 @@ task main(){
 		updateRakeSys(rake, joy2Btn(1), joy2Btn(3), joy1Btn(5), joy1Btn(6));
 
 		//Debug code
-		c++;
-		if(c%40==0) writeDebugStreamLine("The encoder value is: %d", nMotorEncoder[frontRight]);
+		/*
+		writeDebugStreamLine("The encoder value is: %d", nMotorEncoder[frontRight]);
 		if(joy1Btn(1)==1) debugEncoders();
+		*/
 	}
 }
