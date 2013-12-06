@@ -66,22 +66,42 @@ int maxSig(int num0, int num1, int num2, int num3, int num4){
     return num4;
 }
 
-void resetDriveEncoders(int encoderValue){
-	int temp = encoderValue;
-	if(temp>0){
+void driveEncoders(int inches){
+	int encoderValue = inches * -122;
+	if(encoderValue>0){
 		while(nMotorEncoder[frontRight]>=0){
 			motor[frontRight]=-25;
 			motor[frontLeft]=-25;
 			motor[backRight]=-25;
 			motor[backLeft]=-25;
 		}
-	} else if(temp<0){
+	} else if(encoderValue<0){
 		while(nMotorEncoder[frontRight]<=0){
-			motor[frontRight]=-25;
-			motor[frontLeft]=-25;
-			motor[backRight]=-25;
-			motor[backLeft]=-25;
+			motor[frontRight]=25;
+			motor[frontLeft]=25;
+			motor[backRight]=25;
+			motor[backLeft]=25;
 		}
+	}
+}
+
+void turnRight(){
+	nMotorEncoder[frontRight] = 50;
+	while(nMotorEncoder[frontRight]>=0){
+		motor[frontRight]=-25;
+		motor[frontLeft]=-25;
+		motor[backRight]=25;
+		motor[backLeft]=25;
+	}
+}
+
+void turnLeft(){
+	nMotorEncoder[frontRight] = 50;
+	while(nMotorEncoder[frontRight]<=0){
+		motor[frontRight]=25;
+		motor[frontLeft]=25;
+		motor[backRight]=25;
+		motor[backLeft]=25;
 	}
 }
 
@@ -93,24 +113,35 @@ task main(){
 	waitForStart();   // wait for start of tele-op phase
 	#endif
 
+	PlaySound(soundBeepBeep);
+	driveEncoders(10);
+
     //Detect IR Beacon method
 
 	/*
-    bool beaconFound=false;
-
-    if(!beaconFound) driveForward();
-    int irs[5]; //infra-red sensor strengths, maximmum signal
+	int irs[5]; //infra-red sensor strengths, maximmum signal
     HTIRS2readAllACStrength(IRSensor, irs[0], irs[1], irs[2], irs[3], irs[4]);
 
-    if(maxSig(irs[0], irs[1], irs[2], irs[3], irs[4])==irs[0]){
-    	beaconFound=true;
+	while(maxSig(irs[0], irs[1], irs[2], irs[3], irs[4])!=irs[0]){
+		//while IR Sensor is not detected
+		//drive forward
+		updateDriveSys(drive, 100, 100, 100, 100);
+	}
+	*/
 
-        //Turn and place block in basket
-    }
-    */
-
-    //Place block in basket and drive to ramp
-
+	/*
+	//drive forward
+	driveEncoders(10);
+	//turn and place block in basket
+	turnLeft();
+	driveEncoders(20); //drive into basket
+	turnRight();
+	driveEncoders(100); //drive to ramp
+	turnLeft();
+	driveEncoders(50);
+	turnLeft();
+	driveEncoders(150); //drive onto ramp
+	*/
 
     //Drive backwards onto ramp method
     /*
