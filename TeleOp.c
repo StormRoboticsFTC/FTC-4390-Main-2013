@@ -3,7 +3,7 @@
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     ,               sensorI2CMuxController)
 #pragma config(Motor,  mtr_S1_C2_1,     frontLeft,     tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C2_2,     frontRight,    tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C2_2,     frontRight,    tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C3_1,     ladderMotor,   tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S2_C1_1,     backLeft,      tmotorTetrix, openLoop)

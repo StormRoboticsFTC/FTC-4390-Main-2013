@@ -1,12 +1,13 @@
-#pragma config(Hubs,  S1, HTServo,  HTMotor,  HTMotor,  HTMotor)
+#pragma config(Hubs,  S1, HTServo,  HTMotor,  HTMotor,  none)
+#pragma config(Hubs,  S2, HTMotor,  none,     none,     none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Sensor, S2,     IRSensor,       sensorHiTechnicIRSeeker1200)
+#pragma config(Sensor, S2,     IRSensor,       sensorI2CMuxController)
 #pragma config(Motor,  mtr_S1_C2_1,     frontLeft,     tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C2_2,     frontRight,    tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C2_2,     frontRight,    tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C3_1,     ladderMotor,   tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_1,     backLeft,      tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_2,     backRight,     tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S2_C1_1,     backLeft,      tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S2_C1_2,     backRight,     tmotorTetrix, openLoop, reversed)
 #pragma config(Servo,  srvo_S1_C1_1,    rakeServo,            tServoStandard)
 #pragma config(Servo,  srvo_S1_C1_2,    pendulumMoverServo,   tServoStandard)
 #pragma config(Servo,  srvo_S1_C1_3,    servo3,               tServoNone)
@@ -65,42 +66,92 @@ int maxSig(int num0, int num1, int num2, int num3, int num4){
 }
 
 void driveEncoders(int inches){
-	int encoderValue = inches * -122;
-	if(encoderValue>0){
-		while(nMotorEncoder[frontRight]>=0){
+	int startValue = nMotorEncoder[frontRight];
+	int endValue = startValue + (inches * 90);
+
+	if((endValue-startValue)<0){
+		while(nMotorEncoder[frontRight]>=endValue){
 			motor[frontRight]=-25;
 			motor[frontLeft]=-25;
 			motor[backRight]=-25;
 			motor[backLeft]=-25;
 		}
-	} else if(encoderValue<0){
-		while(nMotorEncoder[frontRight]<=0){
+	} else if((endValue-startValue)>0){
+		while(nMotorEncoder[frontRight]<=endValue){
 			motor[frontRight]=25;
 			motor[frontLeft]=25;
 			motor[backRight]=25;
 			motor[backLeft]=25;
 		}
 	}
+
+	//writeDebugStreamLine("The encoder value is: %d End value %d", nMotorEncoder[frontRight], endValue);
+
+	motor[frontRight]=0;
+	motor[frontLeft]=0;
+	motor[backRight]=0;
+	motor[backLeft]=0;
+}
+
+void turn(float fAngle){
+	//positive turns right, negative turns left
+	int startValue = nMotorEncoder[frontRight];
+	int endValue = startValue + (1575 * (fAngle/90));
+
+	//turn left
+	while(nMotorEncoder[frontRight]<=endValue){
+		motor[frontRight]=50;
+		motor[frontLeft]=-50;
+		motor[backRight]=50;
+		motor[backLeft]=-50;
+	}
+
+	//turn right
+	while(nMotorEncoder[frontRight]>=endValue){
+		motor[frontRight]=-50;
+		motor[frontLeft]=50;
+		motor[backRight]=-50;
+		motor[backLeft]=50;
+	}
+
+	motor[frontRight]=0;
+	motor[frontLeft]=0;
+	motor[backRight]=0;
+	motor[backLeft]=0;
 }
 
 void turnRight(){
-	nMotorEncoder[frontRight] = 50;
-	while(nMotorEncoder[frontRight]>=0){
-		motor[frontRight]=-25;
-		motor[frontLeft]=-25;
-		motor[backRight]=25;
-		motor[backLeft]=25;
+	int startValue = nMotorEncoder[frontRight];
+	int endValue = startValue + 1575;
+
+	while(nMotorEncoder[frontRight]>=endValue){
+		motor[frontRight]=-50;
+		motor[frontLeft]=50;
+		motor[backRight]=-50;
+		motor[backLeft]=50;
 	}
+
+	motor[frontRight]=0;
+	motor[frontLeft]=0;
+	motor[backRight]=0;
+	motor[backLeft]=0;
 }
 
 void turnLeft(){
-	nMotorEncoder[frontRight] = 50;
-	while(nMotorEncoder[frontRight]<=0){
-		motor[frontRight]=25;
-		motor[frontLeft]=25;
-		motor[backRight]=25;
-		motor[backLeft]=25;
+	int startValue = nMotorEncoder[frontRight];
+	int endValue = startValue + 1575; // turn 90 degrees 12/12/13
+
+	while(nMotorEncoder[frontRight]<=endValue){
+		motor[frontRight]=50;
+		motor[frontLeft]=-50;
+		motor[backRight]=50;
+		motor[backLeft]=-50;
 	}
+
+	motor[frontRight]=0;
+	motor[frontLeft]=0;
+	motor[backRight]=0;
+	motor[backLeft]=0;
 }
 
 task main(){
@@ -112,10 +163,20 @@ task main(){
 	#endif
 
 	//Debugging code
-	/*
+
+	nMotorEncoder[frontRight]=0;
 	PlaySound(soundBeepBeep);
+	turnLeft();
+
+	/*
+	driveEncoders(20);
+	wait1Msec(1000);
+	driveEncoders(-20);
+	wait1Msec(1000);
+	turnLeft();
+	wait1Msec(1000);
 	driveEncoders(10);
-	*/
+	*
 
     //Detect IR Beacon method
 
@@ -149,7 +210,8 @@ task main(){
 
     //Drive backwards onto ramp method
 
+	/*
     updateDriveSys(drive, -100, -100, -100, -100);
     wait1Msec(3000);
-
+	*/
 }
