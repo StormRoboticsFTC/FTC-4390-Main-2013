@@ -122,7 +122,7 @@ void turn(float fAngle){
 
 void turnRight(){
 	int startValue = nMotorEncoder[frontRight];
-	int endValue = startValue + 1575;
+	int endValue = startValue - 1575;
 
 	while(nMotorEncoder[frontRight]>=endValue){
 		motor[frontRight]=-50;
@@ -139,7 +139,7 @@ void turnRight(){
 
 void turnLeft(){
 	int startValue = nMotorEncoder[frontRight];
-	int endValue = startValue + 1575; // turn 90 degrees 12/12/13
+	int endValue = startValue + 1575; // turned 90 degrees 12/12/13
 
 	while(nMotorEncoder[frontRight]<=endValue){
 		motor[frontRight]=50;
@@ -154,6 +154,25 @@ void turnLeft(){
 	motor[backLeft]=0;
 }
 
+void driveToBasket(){
+	driveEncoders(30);
+	turnLeft();
+}
+
+void depositBlock(){
+	driveEncoders(5);
+}
+
+void driveToRamp(){
+	turnRight();
+	driveEncoders(-30);
+	turnLeft();
+	driveEncoders(20);
+	turnRight();
+	driveEncoders(30);
+}
+
+
 task main(){
 
 	initializeRobot();
@@ -162,54 +181,42 @@ task main(){
 	waitForStart();   // wait for start of tele-op phase
 	#endif
 
-	//Debugging code
-
 	nMotorEncoder[frontRight]=0;
+
+	//Debugging code
 	PlaySound(soundBeepBeep);
-	turnLeft();
-
-	/*
 	driveEncoders(20);
-	wait1Msec(1000);
-	driveEncoders(-20);
-	wait1Msec(1000);
 	turnLeft();
-	wait1Msec(1000);
-	driveEncoders(10);
-	*
+	turnRight();
+	driveEncoders(-20);
+	PlaySound(soundBeepBeep);
 
-    //Detect IR Beacon method
+	//Encoder method
+	/*
+	driveToBasket();
+	depositBlock();
+	drivetoRamp();
+	*/
 
+	//Detect IR Beacon method (Read Direction)
+	/*
+    if(HTIRS2readDCDir(IRSensor)==5){
+
+	}
+	*/
+
+    //Detect IR Beacon method (Read All)
 	/*
 	int irs[5]; //infra-red sensor strengths, maximmum signal
     HTIRS2readAllACStrength(IRSensor, irs[0], irs[1], irs[2], irs[3], irs[4]);
-
-	while(maxSig(irs[0], irs[1], irs[2], irs[3], irs[4])!=irs[0]){
+    while(maxSig(irs[0], irs[1], irs[2], irs[3], irs[4])!=irs[0]){
 		//while IR Sensor is not detected
 		//drive forward
 		updateDriveSys(drive, 100, 100, 100, 100);
 	}
 	*/
 
-
-	//Encoder method
-
-	/*
-	//drive forward
-	driveEncoders(10);
-	//turn and place block in basket
-	turnLeft();
-	driveEncoders(20); //drive into basket
-	turnRight();
-	driveEncoders(100); //drive to ramp
-	turnLeft();
-	driveEncoders(50);
-	turnLeft();
-	driveEncoders(150); //drive onto ramp
-	*/
-
     //Drive backwards onto ramp method
-
 	/*
     updateDriveSys(drive, -100, -100, -100, -100);
     wait1Msec(3000);
