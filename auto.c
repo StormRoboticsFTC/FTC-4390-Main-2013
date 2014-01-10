@@ -156,18 +156,12 @@ void turnLeft(){
 
 void driveToBasket(){
 	driveEncoders(30);
-	turnLeft();
-}
-
-void depositBlock(){
-	driveEncoders(5);
 }
 
 void driveToRamp(){
-	turnRight();
-	driveEncoders(-30);
+	driveEncoders(-10);
 	turnLeft();
-	driveEncoders(20);
+	driveEncoders(26);
 	turnRight();
 	driveEncoders(30);
 }
@@ -178,7 +172,7 @@ task main(){
 	initializeRobot();
 
 	#ifdef COMPETITION
-	waitForStart();   // wait for start of tele-op phase
+	waitForStart();   // wait for start of autonomous phase
 	#endif
 
 	nMotorEncoder[frontRight]=0;
